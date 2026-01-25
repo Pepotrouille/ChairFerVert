@@ -1,12 +1,10 @@
 <script lang="ts">
 	import vitruvianFrontImg from '$lib/assets/images/ui/VitruvianFront.png';
 	import vitruvianBackImg from '$lib/assets/images/ui/VitruvianBack.png';
-    const innerSlotNumber: number = 15; //TODO: Must depend on the Database
+    const innerSlotNumber: number = 8; //TODO: Must depend on the Database
 </script>
 
-<div>
-    <h2>Membres</h2>
-    <div class="divider my-2"></div>
+<div class="overflow-y-auto">
     <h3>Membres externes</h3>
     <div class="external-slots">
         <div class="image-wrapper">
@@ -26,7 +24,10 @@
             <div class="body-slot bg-base-300 hips" id="lowerBackSlot"></div>
         </div>
     </div>
-    <h3 class="pt-5">Membres internes</h3>
+
+    <div class="divider my-2"></div>
+
+    <h3>Membres internes</h3>
     <div class="flex flex-wrap gap-3 pt-5 px-5 justify-center">
         {#each {length: innerSlotNumber} as _, i }
             <div class="inner-slot bg-base-300" id={"innerSlot" + i}></div>
