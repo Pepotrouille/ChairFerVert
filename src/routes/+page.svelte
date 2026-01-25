@@ -12,11 +12,11 @@
         </div>
         <div class="bg-base-300 rounded-sm p-5">
 			<div class="tabs tabs-lift h-full">
-				<input type="radio" name="main_tabs" class="tab w-1/2" aria-label="Dés"  />
+				<input type="radio" name="main_tabs" class="tab w-1/2" aria-label="Dés" checked={true}  />
 				<div class="tab-content bg-base-200 border-base-300 p-2">
             		<DicePanel/>
 				</div>
-				<input type="radio" name="main_tabs" class="tab w-1/2" aria-label="Personnage" checked={true} />
+				<input type="radio" name="main_tabs" class="tab w-1/2" aria-label="Personnage" />
 				<div class="tab-content bg-base-200 border-base-300 p-2 max-h-500 overflow-y-scroll">
             		<CharacterTabs/>
 				</div>
@@ -31,13 +31,6 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
 	}
 
 	@media (min-width: 640px) {
