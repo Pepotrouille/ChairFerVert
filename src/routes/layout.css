@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+@plugin "daisyui";
+
+h2 {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 23px;
+    font-weight: 500;
+}
