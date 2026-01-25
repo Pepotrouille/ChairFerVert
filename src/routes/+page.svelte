@@ -12,11 +12,11 @@
         </div>
         <div class="bg-base-300 rounded-sm p-5">
 			<div class="tabs tabs-lift h-full">
-				<input type="radio" name="main_tabs" class="tab w-1/2" aria-label="Dés" checked={true}  />
+				<input type="radio" name="main_tabs" class="tab w-1/2" aria-label="Dés"/>
 				<div class="tab-content bg-base-200 border-base-300 p-2">
             		<DicePanel/>
 				</div>
-				<input type="radio" name="main_tabs" class="tab w-1/2" aria-label="Personnage" />
+				<input type="radio" name="main_tabs" class="tab w-1/2" aria-label="Personnage" checked={true} />
 				<div class="tab-content bg-base-200 border-base-300 p-2 max-h-500 overflow-y-scroll">
             		<CharacterTabs/>
 				</div>
