@@ -8,7 +8,13 @@
     <NavigationBar/>
     <div class="grid grid-cols-[4fr_3fr] gap-4 py-10 px-20 h-200">
         <div class="bg-base-300 rounded-sm p-5">
-            Inventory
+            Plateau
+			<div 
+				class="slot bg-base-100 drop-target" 
+				style={`height: 150px; width: 150px;`}
+				id={"tabletop-test"} 
+			>
+			</div>
         </div>
         <div class="bg-base-300 rounded-sm p-5">
 			<div class="tabs tabs-lift h-full">

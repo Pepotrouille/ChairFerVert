@@ -32,7 +32,30 @@
         isDragged = false;
 		currentX = baseX
 		currentY = baseY
+        checkForDropZones()
 	}
+
+    function checkForDropZones() {
+        const dropZones = Array.from(document.getElementsByClassName("drop-target"))
+        const draggedRect = draggableEl.getBoundingClientRect();
+
+         let zoneName: string = "";
+
+        const hitZone = dropZones.find(zone => {
+            const rect = zone.getBoundingClientRect();
+            return (
+            draggedRect.left < rect.right &&
+            draggedRect.right > rect.left &&
+            draggedRect.top < rect.bottom &&
+            draggedRect.bottom > rect.top
+            );
+        });
+
+        if (hitZone) {
+            zoneName = hitZone.id || "";
+        }
+        console.log(zoneName? `La zone ${zoneName} a été touchée`: "Aucune zone détectée")
+    }
 
 </script>
 

@@ -9,10 +9,10 @@ let slot: HTMLDivElement;
 </script>
 
 <div 
-    class="slot bg-base-300" 
+    class="slot bg-base-300 drop-target" 
     style={`height: ${size}px; width: ${size}px;`}
     bind:this={slot}
-    id={id} >
+    id={"my-inventory-" + id} >
     {#if object != undefined}
         <DraggableObject size={size-5} baseX={-size*0.5 +2.5} baseY={0}/>
     {/if}
