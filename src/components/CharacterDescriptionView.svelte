@@ -21,8 +21,6 @@
     let haggling:   number = 20;
     let charisma:   number = 20;
     
-    
-    console.log(images)
 </script>
 
 <div>
