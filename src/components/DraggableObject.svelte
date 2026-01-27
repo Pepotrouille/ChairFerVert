@@ -65,7 +65,7 @@
     use:draggable={{ position: { x:currentX, y: currentY } }}
 	on:neodrag={handleDragStart}
 	on:neodrag:end={handleDragEnd}
-    style={`position: absolute; width: ${size}px; height: ${size}px;`}
+    style={`width: ${size}px; height: ${size}px;`}
 >
     {#if !isDragged}
         <div class="tooltip-content">

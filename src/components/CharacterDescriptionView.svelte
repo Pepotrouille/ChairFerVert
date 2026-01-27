@@ -50,10 +50,10 @@
         </div>
         <div>
             <h3 class="pb-1">Vie</h3>
-            <div class="radial-progress bg-base-300 text-rose-400 border-base-300 border-4" style={`--value:${life*100/maxLife};`} aria-valuenow={life} role="progressbar">{life}/{maxLife}</div>
+            <div class="radial-progress bg-base-300 text-error border-base-300 border-4" style={`--value:${life*100/maxLife};`} aria-valuenow={life} role="progressbar">{life}/{maxLife}</div>
             
             <h3 class="pt-4 pb-1">Energie</h3>
-            <div class="radial-progress bg-base-300 text-sky-400 border-base-300 border-4" style={`--value:${energy*100/maxEnergy};`} aria-valuenow={energy} role="progressbar">{energy}/{maxEnergy}</div>
+            <div class="radial-progress bg-base-300 text-info border-base-300 border-4" style={`--value:${energy*100/maxEnergy};`} aria-valuenow={energy} role="progressbar">{energy}/{maxEnergy}</div>
         </div>
     </div>
     

@@ -15,9 +15,7 @@
 	onMount(() => {
         goToLastLog()
         document.getElementById("chatInput")?.addEventListener("keypress", function(event) {
-            console.log('Test 1 2')
             if (event.key === "Enter") {
-                console.log('Test 3 4 ')
                 sendMessage()
             }
         }); 
@@ -80,9 +78,7 @@
 
     //TODO: Makes this function based on actual ID and backend
     const deleteLog = (logIDToDelete: number) => {
-        console.log('Delete log: ', logIDToDelete)
         for(let i = 0; i < logs.length; i++){
-            console.log('Log to delete: ', logIDToDelete, logs[i].id, logs[i].id == logIDToDelete, logs[i].id === logIDToDelete)
             if(logs[i].id == logIDToDelete){
                 logs.splice(i, 1)
                 logs = logs; // trigger Svelte reactivity
@@ -94,7 +90,7 @@
     let currentlyShowingInput: boolean = true;
 </script>
 
-<div>
+<div class="tab-zone">
     <ul id="scroll" class="list bg-base-100 rounded-box shadow-md h-140 overflow-y-scroll">
     {#each logs as log, i (log.id)}
         {#if log.kind === "dice"}
@@ -159,3 +155,10 @@
         {/if}
     </div>
 </div>
+
+
+<style>
+    .tab-zone{
+        min-width: 510px;
+    }
+</style>
