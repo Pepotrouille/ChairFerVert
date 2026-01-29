@@ -1,20 +1,15 @@
 <script lang="ts">
 	import DicePanel from "../components/DicePanel.svelte";
     import CharacterTabs from "../components/CharacterTabs.svelte";
-    import NavigationBar from "../components/NavigationBar.svelte";
+    import GameBoardSection from "../components/GameBoardSection.svelte"
+	import NavigationBar from "../components/NavigationBar.svelte";
 </script>
 
 <main>
     <NavigationBar/>
-    <div class="grid grid-cols-[4fr_3fr] gap-4 py-10 px-20 h-200">
+    <div class="grid grid-cols-[4fr_3fr] gap-4 py-10 px-20 h-220 pt-25">
         <div class="bg-base-300 rounded-sm p-5">
-            Plateau
-			<div 
-				class="slot bg-base-100 drop-target" 
-				style={`height: 150px; width: 150px;`}
-				id={"tabletop-test"} 
-			>
-			</div>
+			<GameBoardSection/>
         </div>
         <div class="bg-base-300 rounded-sm p-5">
 			<div class="tabs tabs-lift h-full">

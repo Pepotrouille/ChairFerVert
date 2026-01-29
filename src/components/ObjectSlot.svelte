@@ -6,6 +6,10 @@ export let size: number = 80;
 export let object: any = undefined;
 let slot: HTMLDivElement;
 
+const callbackDelete = () => {object = undefined}
+
+
+
 </script>
 
 <div 
@@ -14,7 +18,7 @@ let slot: HTMLDivElement;
     bind:this={slot}
     id={"my-inventory-" + id} >
     {#if object != undefined}
-        <DraggableObject size={size-5} baseX={-size*0.5 +2.5} baseY={0}/>
+        <DraggableObject size={size-5} baseX={-size*0.5 +2.5} baseY={0} item={{id: "inventory-" + id, imagePath: "Eyeball.png"}} callbackDelete={callbackDelete} />
     {/if}
 </div>
 

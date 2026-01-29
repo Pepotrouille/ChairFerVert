@@ -5,8 +5,9 @@
     export let size: number = 48;
     export let baseX: number = 0;
     export let baseY: number = 0;
-    export let imagePath: string = "Mushroom.png";
-
+    export let item: any = {id: "Test", imagePath: "Mushroom.png"} //Set to a true item, ucurrently id
+    export let callbackDelete: CallableFunction = () => {}
+    console.log(item)
 
     let isDragged: boolean = false;
 
@@ -41,18 +42,26 @@
 
          let zoneName: string = "";
 
-        const hitZone = dropZones.find(zone => {
-            const rect = zone.getBoundingClientRect();
-            return (
-            draggedRect.left < rect.right &&
-            draggedRect.right > rect.left &&
-            draggedRect.top < rect.bottom &&
-            draggedRect.bottom > rect.top
-            );
-        });
-
-        if (hitZone) {
-            zoneName = hitZone.id || "";
+        const anyZoneHit: any = () => {
+            for (let i = 0; i < dropZones.length; i++){
+                const rect = dropZones[i].getBoundingClientRect();
+                if(     draggedRect.left < rect.right &&
+                        draggedRect.right > rect.left &&
+                        draggedRect.top < rect.bottom &&
+                        draggedRect.bottom > rect.top){
+                    return {inZone: true, zone: dropZones[i], left: draggedRect.left - rect.left, top: draggedRect.top - rect.top}
+            }};
+            return {inZone: false}
+        }
+        const hitZone = anyZoneHit()
+        if (hitZone.inZone) {
+            zoneName = hitZone.zone.id || "";
+            if(hitZone.zone.callbackFunction)
+                hitZone.zone.callbackFunction(item, hitZone.left, hitZone.top) // Set the item
+            if(hitZone.zone.deleteOnCallback){
+                console.log("would be deleted")
+                callbackDelete()
+            }
         }
         console.log(zoneName? `La zone ${zoneName} a été touchée`: "Aucune zone détectée")
     }
@@ -73,10 +82,9 @@
         </div>
     {/if}
     <img
-        
         style={`height: ${size}px; width: ${size}px;`}
-        src={images[`/src/lib/assets/images/objects/${imagePath}`]}
-        alt={"object: " + imagePath}
+        src={images[`/src/lib/assets/images/objects/${item.imagePath}`]}
+        alt={"object: " + item.imagePath}
     >
 </div>
 

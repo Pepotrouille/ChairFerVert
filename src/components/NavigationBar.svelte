@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<div class="navbar bg-base-100 shadow-sm bg-base-200">
+<div class="navbar shadow-sm bg-base-200 fixed">
   <div class="navbar-start">
     <div class="dropdown">
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
