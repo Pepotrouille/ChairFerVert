@@ -6,11 +6,10 @@
         if(!itemDataList.map(i => i.item.id).includes(item.id))
             itemDataList.push({item: item, x: x, y: y})
         else{
-            console.log('Déjà existant')//TODO: Changer x y
+            itemDataList=itemDataList.filter(i=>i.item.id != item.id)
             itemDataList.push({item: item, x: x, y: y})
         }
         itemDataList = [...itemDataList]
-        console.log("GBS: callback called. Update items. New: ", itemDataList)
     }
 
 </script>

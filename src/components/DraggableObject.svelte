@@ -7,7 +7,6 @@
     export let baseY: number = 0;
     export let item: any = {id: "Test", imagePath: "Mushroom.png"} //Set to a true item, ucurrently id
     export let callbackDelete: CallableFunction = () => {}
-    console.log(item)
 
     let isDragged: boolean = false;
 
@@ -59,8 +58,7 @@
             if(hitZone.zone.callbackFunction)
                 hitZone.zone.callbackFunction(item, hitZone.left, hitZone.top) // Set the item
             if(hitZone.zone.deleteOnCallback){
-                console.log("would be deleted")
-                callbackDelete()
+                callbackDelete(hitZone.zone)//TODO: with database
             }
         }
         console.log(zoneName? `La zone ${zoneName} a été touchée`: "Aucune zone détectée")

@@ -1,30 +1,28 @@
 <script lang="ts">
-// filepath: src/components/ObjectSlot.svelte
-import DraggableObject from "../components/DraggableObject.svelte";
-export let id: string;
-export let size: number = 80;
-export let object: any = undefined;
-let slot: HTMLDivElement;
-
-const callbackDelete = () => {object = undefined}
+	import DropableBox from "./DropableBox.svelte";
+    export let id: string;
+    export let size: number = 80;
+    export let item: any;
+    //{item: {id: "Test", imagePath: "Mushroom.png"}, x: -size*0.5 +2.5, y: 0, size: size-5}
+    let itemDataList = item? [{item: item, x: -size*0.5 +2.5, y: 0, size: size-5}]: []
 
 
-
-</script>
-
-<div 
-    class="slot bg-base-300 drop-target" 
-    style={`height: ${size}px; width: ${size}px;`}
-    bind:this={slot}
-    id={"my-inventory-" + id} >
-    {#if object != undefined}
-        <DraggableObject size={size-5} baseX={-size*0.5 +2.5} baseY={0} item={{id: "inventory-" + id, imagePath: "Eyeball.png"}} callbackDelete={callbackDelete} />
-    {/if}
-</div>
-
-<style>
-    .slot {
-        border-radius: 15%;
-        opacity: 80%;
+    let callbackFunction = (item: any, x: number, y: number) => {
+        if(itemDataList.length == 0){
+            itemDataList.push({item: item, x: -size*0.5 +2.5, y: 0, size: size-5})
+        }
+        itemDataList = [...itemDataList]
     }
-</style>
+
+
+    </script>
+
+<DropableBox 
+        mainClass="bg-base-300 drop-target" 
+        mainStyle={`height: ${size}px; width: ${size}px; border-radius: 15%; opacity: 80%;`}
+        id={"my-inventory-" + id}
+        bind:itemDataList={itemDataList}
+        callbackFunction = {callbackFunction}
+        deleteOnCallback = {true}
+     >
+</DropableBox>
