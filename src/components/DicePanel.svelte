@@ -4,50 +4,113 @@
     import DiceIcon from "./svg_icons/DiceIcon.svelte";
     import InputIcon from "./svg_icons/InputIcon.svelte";
     import ThrowIcon from "./svg_icons/ThrowIcon.svelte";
+    import type { Player, Message, MessageCreate, DiceLog, DiceLogCreate } from "../models/models.ts"
 
     let chatInput: string = ""
     let nbThrows: number = 1
     let nbFaces: number = 100
 
     //TODO: Get logs from DB
-    let logs: LogEntry[] = [];
+    let logs: any[] = [];
+    let player: Player
     
 	onMount(() => {
-        goToLastLog()
         document.getElementById("chatInput")?.addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 sendMessage()
             }
         }); 
+        loadPlayer().then((loadedPlayer: Player)=>{
+            player = loadedPlayer 
+            reloadLogs()
+        })
+        
+        
 	});
 
-    type LogEntry =
-        | { kind: "dice"; player: string; value: number; max: number; date: string, id: number }
-        | { kind: "text"; player: string; message: string; date: string, id: number };
+    //TEMP
+    async function loadPlayer(): Promise<Player> {
+        const res = await fetch('http://localhost:8000/players/1')
+        const loadedPlayer = await res.json()
+        return loadedPlayer as Player
+    }
+    async function loadMessages(): Promise<Message[]> {
+        const res = await fetch('http://localhost:8000/messages')
+        const messagesJSON = await res.json()
+        const messages: Message[] = []
+        if (messagesJSON){
+            messagesJSON.forEach((mJSON: any) => {
+                messages.push(mJSON as Message)
+            });
+        }
+        return messages
+    }
+    async function loadDiceLogs(): Promise<DiceLog[]> {
+        const res = await fetch('http://localhost:8000/dice-logs')
+        const diceLogsJSON = await res.json()
+        const diceLogs: DiceLog[] = []
+        if (diceLogsJSON){
+            diceLogsJSON.forEach((dlJSON: any) => {
+                diceLogs.push(dlJSON as DiceLog)
+            });
+        }
+        return diceLogs
+    }
+    async function reloadLogs() {
+        const loadedMessages: Message[] = await loadMessages()
+        const loadedDiceLogs: DiceLog[] = await loadDiceLogs()
+        logs = [...loadedMessages, ...loadedDiceLogs]
+        logs.sort((l1: any, l2: any)=>{return ((l1.base_log.date < l2.base_log.date)? -1:1)})
+        goToLastLog()
+    }
+    
+  async function createDiceLog(dlData: DiceLogCreate) {
+    const response = await fetch("http://localhost:8000/dice-logs", {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(dlData)
+    });
+    if (!response.ok) {
+      throw new Error(`The dice log was not created: ${response.statusText}`);
+    }
+    const newDiceLog = await response.json();
+    reloadLogs()
+    return newDiceLog
+  }
+  async function createMessage(mData: MessageCreate) {
+    const response = await fetch("http://localhost:8000/messages", {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(mData)
+    });
+    if (!response.ok) {
+      throw new Error(`The message was not created: ${response.statusText}`);
+    }
+    const newMessage = await response.json();
+    reloadLogs()
+    return newMessage
+  }
 
     const goToLastLog = () => {
         let scroll=document.getElementById("scroll");
         scroll!.scrollTop = scroll?.scrollHeight || 0;
     }
 
-    const diceMessage = (p: LogEntry & { kind: "dice" }) =>
-        `<b>${p.player}</b> a jeté un dé ${p.max} et obtenu <b>${p.value}</b>`;
+    const diceMessage = (p: DiceLog) =>
+        `<b>${p.base_log.player.name}</b> a jeté un dé ${p.max} et obtenu <b>${p.value}</b>`;
 
-    const textMessage = (p: LogEntry & { kind: "text" }) =>
-        `<b>${p.player}</b>:&nbsp;`;
+    const textMessage = (p: Message) =>
+        `<b>${p.base_log.player.name}</b>:&nbsp;`;
 
-    const throwDices = () => {
+    const throwDices = async () => {
         for (let i = 0; i < nbThrows; i++){
             //TODO: Have this calculation on the back side?
-            const entry: LogEntry = {
-                kind: "dice",
-                player: "Pepo", //TODO: Change this to actual player
+            const dlData: DiceLogCreate = {
+                player_id: player.id,
                 value: Math.ceil(Math.random() * nbFaces),
                 max: nbFaces,
-                date: Date(),
-                id: Math.floor(Math.random() * 2048)
             };
-            logs.push(entry);
+            await createDiceLog(dlData)
             logs = logs; // trigger Svelte reactivity
         }
         nbThrows = 1
@@ -57,22 +120,19 @@
 		});
     }
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
         if(chatInput === "") return
         
         //TODO: Have this calculation on the back side?
-        const entry: LogEntry = {
-            kind: "text",
-            player: "Pepo", //TODO: Change this to actual player
-            message: chatInput,
-            date: Date(),
-            id: Math.floor(Math.random() * 2048)
+        const mData: MessageCreate = {
+            player_id: player.id,
+            content: chatInput,
         };
-        logs.push(entry);
+        await createMessage(mData)
         logs = logs; // trigger Svelte reactivity
         chatInput = ""
         tick().then(() => {
-				goToLastLog()
+			goToLastLog()
 		});
     }
 
@@ -80,7 +140,7 @@
     const deleteLog = (logIDToDelete: number) => {
         for(let i = 0; i < logs.length; i++){
             if(logs[i].id == logIDToDelete){
-                logs.splice(i, 1)
+                logs.splice(i, 1) // TODO
                 logs = logs; // trigger Svelte reactivity
                 return
             }
@@ -92,22 +152,22 @@
 
 <div class="tab-zone">
     <ul id="scroll" class="list bg-base-100 rounded-box shadow-md h-140 overflow-y-scroll">
-    {#each logs as log, i (log.id)}
-        {#if log.kind === "dice"}
+    {#each logs as log, i (log.base_log.id)}
+        {#if log.content}
         <ChatLog
-            htmlMessage={diceMessage(log)}
-            message=""
-            date={log.date.substring(0, 25)}
+            htmlMessage={textMessage(log)}
+            message={log.content}
+            date={log.base_log.date.substring(0,14)}
             showDeleteButton={true}
-            deleteCallback={() => {deleteLog(log.id)}}
+            deleteCallback={() => {deleteLog(log.base_log.id)}}
         />
         {:else}
         <ChatLog
-            htmlMessage={textMessage(log)}
-            message={log.message}
-            date={log.date.substring(0, 25)}
+            htmlMessage={diceMessage(log)}
+            message=""
+            date={log.base_log.date.substring(0,14)}
             showDeleteButton={true}
-            deleteCallback={() => {deleteLog(log.id)}}
+            deleteCallback={() => {deleteLog(log.base_log.id)}}
         />
         {/if}
     {/each}
