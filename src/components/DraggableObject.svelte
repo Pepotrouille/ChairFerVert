@@ -5,7 +5,7 @@
     export let size: number = 48;
     export let baseX: number = 0;
     export let baseY: number = 0;
-    export let item: any = {id: "Test", imagePath: "Mushroom.png"} //Set to a true item, ucurrently id
+    export let item: any = {id: "Test", imagePath: "Mushroom.png"} //Set to a true item, ucurrently id. See if other than item (furniture/character)
     export let callbackDelete: CallableFunction = () => {}
 
     let isDragged: boolean = false;
@@ -34,6 +34,10 @@
 		currentY = baseY
         checkForDropZones()
 	}
+
+    const handleClick = (item: any) => {
+        console.log("Item: ", item)
+    }
 
     function checkForDropZones() {
         const dropZones = Array.from(document.getElementsByClassName("drop-target"))
@@ -66,12 +70,22 @@
 
 </script>
 
+
 <div
     class={"absolute tooltip z-5" + (!isDragged ? " slight-bounce" : "")}
     bind:this={draggableEl}
     use:draggable={{ position: { x:currentX, y: currentY } }}
-	on:neodrag={handleDragStart}
-	on:neodrag:end={handleDragEnd}
+    on:neodrag={handleDragStart}
+    on:neodrag:end={handleDragEnd}
+    on:click={() => {handleClick(item)}}
+    on:keydown={(e) => {
+        if (e.key === " ") {
+            handleClick(item)
+        }
+    }}
+    tabindex="0"
+    role="button"
+    aria-pressed="false"
     style={`width: ${size}px; height: ${size}px;`}
 >
     {#if !isDragged}

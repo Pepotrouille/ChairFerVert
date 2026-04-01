@@ -20,9 +20,9 @@
                 sendMessage()
             }
         }); 
-        loadPlayer().then((loadedPlayer: Player)=>{
+        loadPlayer().then(async (loadedPlayer: Player)=>{
             player = loadedPlayer 
-            reloadLogs()
+            await reloadLogs()
         })
         
         
@@ -74,7 +74,7 @@
       throw new Error(`The dice log was not created: ${response.statusText}`);
     }
     const newDiceLog = await response.json();
-    reloadLogs()
+    await reloadLogs()
     return newDiceLog
   }
   async function createMessage(mData: MessageCreate) {
@@ -87,7 +87,7 @@
       throw new Error(`The message was not created: ${response.statusText}`);
     }
     const newMessage = await response.json();
-    reloadLogs()
+    await reloadLogs()
     return newMessage
   }
 

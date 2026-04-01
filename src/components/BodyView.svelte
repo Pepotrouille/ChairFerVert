@@ -1,7 +1,50 @@
 <script lang="ts">
 	import vitruvianFrontImg from '$lib/assets/images/ui/VitruvianFront.png';
 	import vitruvianBackImg from '$lib/assets/images/ui/VitruvianBack.png';
+	import DropableBox from './DropableBox.svelte';
+	import ObjectSlot from './ObjectSlot.svelte';
     const innerSlotNumber: number = 8; //TODO: Must depend on the Database
+    type FrontSlotKey =
+        | "headSlot"
+        | "chestSlot"
+        | "leftLegSlot"
+        | "rightLegSlot"
+        | "leftArmSlot"
+        | "rightArmSlot";
+
+    const itemDataFrontSlots: Record<FrontSlotKey, any> = {
+        headSlot: null,
+        chestSlot: null,
+        leftLegSlot: null,
+        rightLegSlot: null,
+        leftArmSlot: null,
+        rightArmSlot: null,
+    };
+    const frontStyles: Record<FrontSlotKey, string>={
+        headSlot: "top: 20%; left: 44.75%;",
+        chestSlot: "top: 34%; left: 44.75%;",
+        leftLegSlot: "top: 72%; left: 28%;",
+        rightLegSlot: "top: 72%; right: 30%;",
+        leftArmSlot: "top: 28%; left: 20%;",
+        rightArmSlot: "top: 28%; right: 20%;"
+    }
+    const frontKeys = Object.keys(itemDataFrontSlots) as FrontSlotKey[];
+
+    type BackSlotKey =
+        | "upperBackSlot"
+        | "lowerBackSlot"
+    const itemDataBackSlots: Record<BackSlotKey, any> = {
+        upperBackSlot: null,
+        lowerBackSlot: null
+    };
+    const backStyles: Record<BackSlotKey, string>={
+        upperBackSlot: "top: 30%; left: 44.75%;",
+        lowerBackSlot: "top: 50%; left: 44.75%;"
+    }
+    const backKeys = Object.keys(itemDataBackSlots) as BackSlotKey[];
+
+    const bodySlot="position: absolute; width: 12%; height: 12%; border-radius: 15%; opacity: 80%;"
+    
 </script>
 
 <div class="overflow-y-auto">
@@ -10,18 +53,27 @@
         <div class="image-wrapper">
             <img src={vitruvianFrontImg} alt="Front view" />
             <!-- Overlay example -->
-            <div class="body-slot bg-base-300 head" id="headSlot"></div>
-            <div class="body-slot bg-base-300 chest" id="chestSlot"></div>
-            <div class="body-slot bg-base-300 left-leg" id="leftLegSlot"></div>
-            <div class="body-slot bg-base-300 right-leg" id="rightLegSlot"></div>
-            <div class="body-slot bg-base-300 left-arm" id="leftArmSlot"></div>
-            <div class="body-slot bg-base-300 right-arm" id="rightArmSlot"></div>
+             {#each frontKeys as key}
+                <ObjectSlot
+                    mainClass="body-slot bg-base-300 head" 
+                    mainStyle={`height: max; width: max; `  + frontStyles[key] + bodySlot}
+                    id={key} 
+                    size={0}
+                    bind:item={itemDataFrontSlots[key]}
+                />
+            {/each}
         </div>
         <div class="image-wrapper">
             <img src={vitruvianBackImg} alt="Back view"/>
-
-            <div class="body-slot bg-base-300 chest" id="upperBackSlot"></div>
-            <div class="body-slot bg-base-300 hips" id="lowerBackSlot"></div>
+             {#each backKeys as key}
+                <ObjectSlot
+                    mainClass="body-slot bg-base-300 head" 
+                    mainStyle={`height: max; width: max; `  + backStyles[key] + bodySlot}
+                    id={key} 
+                    size={0}
+                    bind:item={itemDataBackSlots[key]}
+                />
+            {/each}
         </div>
     </div>
 
@@ -53,14 +105,6 @@
         display: block;
         user-select: none;
     }
-
-    .body-slot {
-        position: absolute;
-        width: 12%;
-        height: 12%;
-        border-radius: 15%;
-        opacity: 80%;
-    }
     
     .inner-slot {
         width: 50px;
@@ -70,32 +114,5 @@
     }
 
     /* Example positions */
-    .body-slot.head {
-        top: 20%;
-        left: 44.75%;
-    }
-    .body-slot.chest {
-        top: 34%;
-        left: 44.75%;
-    }
-    .body-slot.hips {
-        top: 50%;
-        left: 44.75%;
-    }
-    .body-slot.left-leg {
-        top: 72%;
-        left: 28%;
-    }
-    .body-slot.right-leg {
-        top: 72%;
-        right: 30%;
-    }
-    .body-slot.left-arm {
-        top: 28%;
-        left: 20%;
-    }
-    .body-slot.right-arm {
-        top: 28%;
-        right: 20%;
-    }
+
 </style>

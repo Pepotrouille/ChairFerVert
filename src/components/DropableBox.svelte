@@ -8,14 +8,13 @@
     export let itemDataList: any
     export let callbackFunction: CallableFunction | null = null
     export let deleteOnCallback: boolean = false
-    export let innerHTML: string = ""
+    export let dropableBoxDiv: HTMLElement | null = null;
 
-    let dropableBoxDiv: HTMLDivElement;
     import { onMount } from "svelte";
     onMount(() => {
         if (dropableBoxDiv) {
             (dropableBoxDiv as any).callbackFunction = callbackFunction;
-            (dropableBoxDiv as any).deleteOnCallback = deleteOnCallback
+            (dropableBoxDiv as any).deleteOnCallback = deleteOnCallback;
         }
     });
 
